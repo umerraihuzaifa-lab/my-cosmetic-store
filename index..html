@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cosmetic Store Clone</title>
+  <style>
+    * {margin: 0; padding: 0; box-sizing: border-box;}
+    body {font-family: Arial, sans-serif; line-height: 1.6; background: #fff; color: #333;}
+    a {text-decoration: none; color: inherit;}
+
+    /* Navbar */
+    .navbar {
+      display: flex;
+      flex-direction: column;
+      background: #FFFFFF;
+      border-bottom: 1px solid #eee;
+      padding: 10px 20px;
+    }
+
+    .top-row {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo img {
+      height: 100px;
+      width: auto;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 20px;
+    }
+    .nav-links a:hover {color: #e91e63;}
+
+    .store-name {
+      font-size: 24px;
+      font-weight: bold;
+      color: #e91e63;
+    }
+
+    .cart {cursor: pointer;}
+
+    .search-bar {
+      margin-top: 10px;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+    .search-bar input {
+      width: 70%;
+      max-width: 400px;
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      border-radius: 20px;
+    }
+
+    /* Categories Section */
+    .categories {
+      padding: 30px 20px;
+      text-align: center;
+      background: linear-gradient(to right, #fff, #ffe6f0);
+    }
+    .categories h2 {
+      font-size: 24px;
+      margin-bottom: 20px;
+      color: #e91e63;
+    }
+    .category-list {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .category {
+      text-align: center;
+      width: 100px;
+    }
+    .category img {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 2px solid #e91e63;
+      padding: 5px;
+      background: #fff;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .category img:hover {
+      transform: scale(1.1);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+    .category p {
+      margin-top: 8px;
+      font-size: 14px;
+      color: #333;
+    }
+
+    /* Slider */
+    .slider {
+      position: relative;
+      max-width: 100%;
+      height: 500px;
+      overflow: hidden;
+    }
+    .slide {
+      display: none;
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+    .slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .caption {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #fff;
+      text-shadow: 2px 2px 8px rgba(0,0,0,0.8);
+      max-width: 600px;
+    }
+    .caption.left {left: 8%; text-align: left;}
+    .caption.right {right: 8%; text-align: right;}
+    .caption h2 {
+      font-size: 56px;
+      margin-bottom: 20px;
+      color: #fff;
+    }
+    .caption p {
+      font-size: 24px;
+      margin-bottom: 25px;
+      color: #f1f1f1;
+    }
+    .caption .btn {
+      padding: 14px 28px;
+      background: #e91e63;
+      color: #fff;
+      border-radius: 30px;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+    .caption .btn:hover {background: #c2185b;}
+
+    /* Products */
+    .intro {
+      padding: 40px 20px;
+      text-align: center;
+      max-width: 800px;
+      margin: auto;
+    }
+    .intro h2 {font-size: 28px; margin-bottom: 15px; color: #e91e63;}
+    .intro p {font-size: 16px; color: #555;}
+
+    .products {
+      padding: 40px 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+    }
+    .product {
+      border: 1px solid #eee;
+      padding: 15px;
+      text-align: center;
+      border-radius: 10px;
+      transition: 0.3s;
+    }
+    .product:hover {box-shadow: 0 4px 15px rgba(0,0,0,0.1); transform: translateY(-5px);}
+    .product img {max-width: 100%; height:200px; object-fit:cover; border-radius: 10px;}
+    .product h3 {margin: 10px 0; font-size: 18px;}
+    .product p {color: #e91e63; font-weight: bold; margin-bottom: 10px;}
+    .product span {display:block; font-size:14px; color:#555; margin-bottom:8px;}
+    .product button {
+      padding: 8px 16px;
+      border: none;
+      background: #e91e63;
+      color: #fff;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    /* Footer */
+    footer {background: #111; color: #fff; padding: 40px 20px;}
+    .footer-content {display: flex; flex-wrap: wrap; justify-content: space-between;}
+    .footer-section {flex: 1; margin: 10px; min-width: 220px;}
+    .footer-section h4 {margin-bottom: 10px; color: #e91e63;}
+    .footer-section ul {list-style: none;}
+    .footer-section ul li {margin-bottom: 8px;}
+    .subscribe input {
+      padding: 8px;
+      width: 70%;
+      border: none;
+      border-radius: 5px;
+      margin-right: 5px;
+    }
+    .subscribe button {
+      padding: 8px 12px;
+      border: none;
+      background: #e91e63;
+      color: #f8bbd0;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    @media(max-width:768px){
+      .nav-links {display: none;}
+      .navbar {flex-direction: column;}
+      .slider {height: 280px;}
+      .slide img {height: 280px;}
+      .caption h2 {font-size: 28px;}
+      .caption p {font-size: 16px;}
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <div class="navbar">
+    <div class="top-row">
+      <!-- Left side: Logo -->
+      <div class="logo">
+        <img src="WhatsApp Image 2025-09-08 at 11.27.17_e5307521.jpg" alt="Logo">
+      </div>
+
+      <!-- Middle: Navigation -->
+      <div class="nav-links">
+        <a href="#">Home</a>
+        <a href="#">Shop</a>
+        <a href="#">Blog</a>
+        <a href="#">Contact</a>
+      </div>
+
+      <!-- Right side: Store name + Cart -->
+      <div style="display: flex; align-items: center; gap: 15px;">
+        <h1 class="store-name">COSMETIC STORE</h1>
+        <div class="cart">🛒</div>
+      </div>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="search-bar">
+      <input type="text" id="searchInput" placeholder="Search products...">
+    </div>
+  </div>
+
+  <!-- Categories -->
+  <div class="categories">
+    <h2>Popular Categories</h2>
+    <div class="category-list">
+      <a href="#lipstick" class="category"><img src="https://cdn.pixabay.com/photo/2024/02/21/13/15/lipstick-8587707_640.jpg"><p>Lipstick</p></a>
+      <a href="#foundation" class="category"><img src="https://cdn.pixabay.com/photo/2020/10/22/16/49/lipstick-5676592_640.jpg"><p>Foundation</p></a>
+      <a href="#eyeliner" class="category"><img src="https://cdn.pixabay.com/photo/2025/08/02/10/16/ai-generated-9750371_640.jpg"><p>Eyeliner</p></a>
+      <a href="#blush" class="category"><img src="https://cdn.pixabay.com/photo/2022/02/15/09/53/cosmetics-7014582_640.jpg"><p>Blush</p></a>
+      <a href="#concealer" class="category"><img src="https://cdn.pixabay.com/photo/2017/01/16/14/17/make-up-1984115_640.jpg"><p>Concealer</p></a>
+      <a href="#primer" class="category"><img src="https://cdn.pixabay.com/photo/2020/04/02/05/19/beauty-4993472_640.jpg"><p>Primer</p></a>
+      <a href="#lipgloss" class="category"><img src="https://cdn.pixabay.com/photo/2016/07/21/04/37/lipgloss-1531852_640.jpg"><p>Lip Gloss</p></a>
+      <a href="#mascara" class="category"><img src="https://cdn.pixabay.com/photo/2014/09/13/15/36/mascara-444166_1280.jpg"><p>Mascara</p></a>
+      <a href="#highlighter" class="category"><img src="https://cdn.pixabay.com/photo/2024/03/30/12/49/ai-generated-8664712_640.jpg"><p>Highlighter</p></a>
+    </div>
+  </div>
+
+  <!-- Slider -->
+  <div class="slider">
+    <div class="slide fade">
+      <img src="https://cdn.pixabay.com/photo/2017/04/12/08/58/brushes-2224005_640.jpg" alt="slide1">
+      <div class="caption left">
+        <h2>Summer Sale 50% OFF</h2>
+        <p>Upgrade your beauty collection with our hot deals</p>
+        <a href="#" class="btn">Shop Now</a>
+      </div>
+    </div>
+    <div class="slide fade">
+      <img src="https://cdn.pixabay.com/photo/2018/03/19/20/17/beauty-parlor-3241097_640.jpg" alt="slide2">
+      <div class="caption right">
+        <h2>New Arrivals</h2>
+        <p>Discover the latest cosmetics trends</p>
+        <a href="#" class="btn">Explore</a>
+      </div>
+    </div>
+    <div class="slide fade">
+      <img src="https://cdn.pixabay.com/photo/2019/08/23/05/57/makeup-4424970_640.jpg" alt="slide3">
+      <div class="caption left">
+        <h2>Exclusive Deals</h2>
+        <p>Buy 1 Get 1 Free on selected items</p>
+        <a href="#" class="btn">Grab Now</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Intro Section -->
+  <div class="intro">
+    <h2>Explore Our Beauty Collection</h2>
+    <p>Our collection includes lipstick, lip gloss, eyeliner, foundation, concealer and other products. Each product is made to the highest quality and for the best results.</p>
+  </div>
+
+  <!-- Products -->
+  <section class="products">
+    <div class="product" id="lipstick">
+      <img src="https://cdn.pixabay.com/photo/2024/02/21/13/15/lipstick-8587707_640.jpg" alt="lipstick">
+      <h3>Lipstick</h3>
+      <span>High quality matte lipstick</span>
+      <p>$15</p>
+      <button>Add to Cart</button>
+    </div>
+    <div class="product" id="foundation">
+      <img src="https://cdn.pixabay.com/photo/2020/10/22/16/49/lipstick-5676592_640.jpg" alt="foundation">
+      <h3>Foundation</h3>
+      <span>Full coverage foundation</span>
+      <p>$25</p>
+      <button>Add to Cart</button>
+    </div>
+    <div class="product" id="eyeliner">
+      <img src="https://cdn.pixabay.com/photo/2025/08/02/10/16/ai-generated-9750371_640.jpg" alt="eyeliner">
+      <h3>Eyeliner</h3>
+      <span>Waterproof liquid eyeliner</span>
+      <p>$10</p>
+      <button>Add to Cart</button>
+    </div>
+    <div class="product" id="blush">
+      <img src="https://cdn.pixabay.com/photo/2022/02/15/09/53/cosmetics-7014582_640.jpg" alt="blush">
+      <h3>Blush</h3>
+      <span>Natural pink blush</span>
+      <p>$12</p>
+      <button>Add to Cart</button>
+    </div>
+    <div class="product" id="concealer">
+      <img src="https://cdn.pixabay.com/photo/2017/01/16/14/17/make-up-1984115_640.jpg" alt="concealer">
+      <h3>Concealer</h3>
+      <span>Long lasting concealer</span>
+      <p>$18</p>
+      <button>Add to Cart</button>
+    </div>
+    <div class="product" id="primer">
+      <img src="https://cdn.pixabay.com/photo/2020/04/02/05/19/beauty-4993472_640.jpg" alt="primer">
+      <h3>Primer</h3>
+      <span>Smoothing makeup primer</span>
+      <p>$20</p>
+      <button>Add to Cart</button>
+    </div>
+    <div class="product" id="lipgloss">
+      <img src="https://cdn.pixabay.com/photo/2016/07/21/04/37/lipgloss-1531852_640.jpg" alt="lip gloss">
+      <h3>Lip Gloss</h3>
+      <span>Glossy finish lip gloss</span>
+      <p>$14</p>
+      <button>Add to Cart</button>
+    </div>
+    <div class="product" id="mascara">
+      <img src="https://cdn.pixabay.com/photo/2014/09/13/15/36/mascara-444166_1280.jpg" alt="mascara">
+      <h3>Mascara</h3>
+      <span>Volume boost mascara</span>
+      <p>$16</p>
+      <button>Add to Cart</button>
+    </div>
+    <div class="product" id="highlighter">
+      <img src="https://cdn.pixabay.com/photo/2024/03/30/12/49/ai-generated-8664712_640.jpg" alt="highlighter">
+      <h3>Highlighter</h3>
+      <span>Shimmering highlighter</span>
+      <p>$22</p>
+      <button>Add to Cart</button>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h4>About Us</h4>
+        <p>We provide the best cosmetics for your beauty needs.</p>
+      </div>
+      <div class="footer-section">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="#">Home</a></li>
+          <li><a href="#">Shop</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-section subscribe">
+        <h4>Subscribe</h4>
+        <input type="email" placeholder="Enter email">
+        <button>Submit</button>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Simple Slider Script
+    let slideIndex = 0;
+    showSlides();
+    function showSlides() {
+      let slides = document.querySelectorAll(".slide");
+      slides.forEach(slide => slide.style.display = "none");
+      slideIndex++;
+      if (slideIndex > slides.length) {slideIndex = 1}
+      slides[slideIndex-1].style.display = "block";
+      setTimeout(showSlides, 4000);
+    }
+  </script>
+</body>
+</html>
+
+
